@@ -1,0 +1,9 @@
+name: Set up node.js environment using nvm
+description: Annotates the build with a file count
+author: https://github.com/automattic
+requirements: []
+configuration:
+  properties:
+    version:
+      type: string
+  additionalProperties: false
