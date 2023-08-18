@@ -1,4 +1,4 @@
-name: Set up node.js environment using nvm
+name: NVM
 description: Annotates the build with a file count
 author: https://github.com/automattic
 requirements: []

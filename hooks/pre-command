@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "~~~ :node: Installing node.js"
+
+echo "--- Installing nvm"
+
+nvm_installation_dir="$(mktemp -d)"
+touch "$nvm_installation_dir/.automattic-nvm-dir-marker"
+
+# Store the installation directory in meta-data so that we can uninstall it later in the pre-exit hook.
+buildkite-agent meta-data set "automattic-nvm-installation-dir" "$nvm_installation_dir"
+echo "Installing nvm in $nvm_installation_dir"
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | \
+    PROFILE=/dev/null NVM_DIR="${nvm_installation_dir}" bash
+
+# shellcheck source=/dev/null
+source "$nvm_installation_dir/nvm.sh"
+
+echo "--- Installing node.js"
+install_args=("--no-progress")
+if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
+    echo "Installing node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
+    install_args+=("${BUILDKITE_PLUGIN_NVM_VERSION}")
+else
+    echo "Installing node.js version specified in the .nvmrc file"
+fi
+nvm install "${install_args[@]}"
+
+echo "--- Using node $(nvm current)"
+
+unset nvm_installation_dir
