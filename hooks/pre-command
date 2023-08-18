@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-echo "~~~ :node: Installing node.js"
+echo "--- :node: Installing node.js"
 
-echo "--- Installing nvm"
+echo "~~~ Installing nvm"
 
 NVM_DIR="$(mktemp -d)"
 export NVM_DIR
@@ -19,7 +19,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFI
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh"
 
-echo "--- Installing node.js"
+echo "~~~ Installing node.js"
 install_args=("--no-progress")
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
     echo "Installing node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
@@ -29,4 +29,4 @@ else
 fi
 nvm install "${install_args[@]}"
 
-echo "--- Using node $(nvm current)"
+echo "~~~ Using node $(nvm current)"
