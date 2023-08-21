@@ -30,3 +30,5 @@ fi
 nvm install "${install_args[@]}"
 
 echo "~~~ Using node $(nvm current)"
+
+printenv
