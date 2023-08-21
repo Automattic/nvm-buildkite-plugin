@@ -1,3 +1,3 @@
 steps:
-  - label: Validate the plugin
-    command: make validate
+  - command: make validate
+  - command: .buildkite/dogfood-pipeline.sh node lts/* v18 v18.17.0 v17
