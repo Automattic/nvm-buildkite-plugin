@@ -9,7 +9,7 @@ pipeline_step() {
         echo "  - label: ':node: Validate $node_version'"
         echo "    command: .buildkite/verify_node.sh '$node_version'"
         echo "    plugins:"
-        echo "      - automattic/nvm#${BUILDKITE_COMMIT}:"
+        echo "      - ./:"
         echo "          version: '$node_version'"
     } >> "$pipeline_yml"
 }
