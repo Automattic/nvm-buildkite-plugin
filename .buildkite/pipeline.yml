@@ -1,3 +1,4 @@
 steps:
   - command: make validate
-  - command: .buildkite/dogfood-pipeline.sh node lts/* v18 v18.17.0 v17
+  # node v18 and later doesn't work on the current build agents.
+  - command: .buildkite/dogfood-pipeline.sh v17

@@ -33,3 +33,6 @@ if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
 else
     nvm use
 fi
+
+echo "Verify that node (version $(node --version)) can be used"
+test "$(echo 'console.log("Hello node.js")' | node -)" == "Hello node.js"
