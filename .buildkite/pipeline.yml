@@ -1,6 +1,13 @@
 steps:
   - command: make validate
-  # node v18 and later doesn't work on the current build agent.
-  # Once we switch to a newer OS for the default agent, we can add more node
-  # version here. See https://github.com/nvm-sh/nvm/issues/2972
-  - command: .buildkite/dogfood-pipeline.sh v17
+  - label: ":node: Validate {{ matrix }}"
+    command: .buildkite/verify_node.sh {{ matrix }}
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}:
+          version: "{{ matrix }}"
+    matrix:
+      # node v18 and later doesn't work on the current build agent.
+      # Once we switch to a newer OS for the default agent, we can add more node
+      # version here. See https://github.com/nvm-sh/nvm/issues/2972
+      - v17
+      - v16
