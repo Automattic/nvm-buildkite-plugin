@@ -1,5 +1,5 @@
 name: NVM
-description: Annotates the build with a file count
+description: Sets up node.js environment using nvm
 author: https://github.com/automattic
 requirements: []
 configuration:
