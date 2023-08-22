@@ -4,7 +4,7 @@ set -euo pipefail
 
 echo "~~~ Installing nvm"
 
-NVM_DIR="$(mktemp -d)"
+NVM_DIR="$(mktemp -dt automattic-nvm-XXXXXXXX)"
 export NVM_DIR
 touch "$NVM_DIR/.automattic-nvm-dir-marker"
 
