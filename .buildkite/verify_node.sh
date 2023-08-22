@@ -4,6 +4,8 @@ set -euo pipefail
 
 echo "--- :node: Current node version is $(node --version)"
 
+echo "NVM_DIR is: $NVM_DIR"
+
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh" --no-use
 
