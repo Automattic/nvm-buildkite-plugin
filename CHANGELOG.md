@@ -42,12 +42,18 @@ _None._
 
 ### Bug Fixes
 
-* Fix issue where the plugin fails on macOS VMs.
-* Fix issue where the plugin fails when no .nvmrc file and no node version specified.
+_None._
 
 ### Internal Changes
 
 _None._
+
+## 0.2.0
+
+### Bug Fixes
+
+* Fix issue where the plugin fails on macOS VMs.
+* Fix issue where the plugin fails when no .nvmrc file and no node version specified.
 
 ## 0.1.0
 

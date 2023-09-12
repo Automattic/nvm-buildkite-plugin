@@ -10,7 +10,7 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: ls
     plugins:
-      - automattic/nvm#v1.0.0:
+      - automattic/nvm#0.2.0:
           version: 'v18'
 ```
 
