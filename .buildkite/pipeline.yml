@@ -1,13 +1,28 @@
 steps:
   - command: make validate
-  - label: ":node: Validate {{ matrix }}"
-    command: .buildkite/verify_node.sh {{ matrix }}
+
+  - label: ":node: Validate {{ matrix.node }} via version property"
+    command: .buildkite/verify_node.sh {{ matrix.node }}
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}:
-          version: "{{ matrix }}"
+          version: "{{ matrix.node }}"
+    env:
+      IMAGE_ID: xcode-14.3.1
+    agents:
+      queue: "{{ matrix.queue }}"
     matrix:
-      # node v18 and later don't work on the current build agent.
-      # Once we switch to a newer OS for the default agent, we can add more node
-      # versions here. See https://github.com/nvm-sh/nvm/issues/2972
-      - v17
-      - v16
+      setup:
+        node:
+          # node v18 and later don't work on the current build agent.
+          # Once we switch to a newer OS for the default agent, we can add more node
+          # versions here. See https://github.com/nvm-sh/nvm/issues/2972
+          - v17
+          - v16
+        queue:
+          - mac
+          - default
+
+  - label: ":node: Do nothing when no .nvmrc and no node version specified"
+    command: echo noop
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}
