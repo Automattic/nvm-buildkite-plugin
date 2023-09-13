@@ -26,3 +26,18 @@ steps:
     command: echo noop
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
+
+  - label: ":node: [Test] source nvm from npm script"
+    command: cd tests/dummy && npm install
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}:
+          version: v17
+    env:
+      IMAGE_ID: xcode-14.3.1
+    agents:
+      queue: "{{ matrix.queue }}"
+    matrix:
+      setup:
+        queue:
+          - mac
+          - default
