@@ -48,6 +48,12 @@ _None._
 
 _None._
 
+## 0.2.1
+
+### Bug Fixes
+
+* Fix issue in macOS when a script tried to `source` the `$NVM_DIR` [#9]
+
 ## 0.2.0
 
 ### Bug Fixes
