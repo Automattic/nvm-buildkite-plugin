@@ -15,6 +15,8 @@ echo "~~~ Installing nvm"
 }
 
 NVM_DIR="$(mktemp -dt automattic-nvm-XXXXXXXX)"
+# Make sure the path is a real path.
+NVM_DIR=$(readlink -fn "$NVM_DIR")
 export NVM_DIR
 touch "$NVM_DIR/.automattic-nvm-dir-marker"
 

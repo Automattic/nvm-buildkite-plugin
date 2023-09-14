@@ -1,0 +1,11 @@
+{
+  "name": "dummy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "source $NVM_DIR/nvm.sh"
+  },
+  "author": "",
+  "license": "ISC"
+}
