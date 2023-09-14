@@ -27,6 +27,8 @@ steps:
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
 
+  # More details on what is being test here can be found at
+  # https://github.com/Automattic/nvm-buildkite-plugin/pull/9
   - label: ":node: [Test] source nvm from npm script"
     command: cd tests/dummy && npm install
     plugins:
