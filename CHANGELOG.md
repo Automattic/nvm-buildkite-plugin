@@ -48,6 +48,12 @@ _None._
 
 _None._
 
+## 0.3.0
+
+### New Features
+
+* Add a new option `curlrc` which allows pipelines to pass extra arguments to curl commands.
+
 ## 0.2.1
 
 ### Bug Fixes
