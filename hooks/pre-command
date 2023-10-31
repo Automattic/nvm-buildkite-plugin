@@ -21,6 +21,12 @@ NVM_DIR=$(readlink -fn "$NVM_DIR")
 export NVM_DIR
 touch "$NVM_DIR/.automattic-nvm-dir-marker"
 
+# Pass the user specified .curlrc file content to all curl commands.
+if [[ -n ${BUILDKITE_PLUGIN_NVM_CURLRC:-} ]]; then
+    export CURL_HOME="$NVM_DIR"
+    echo "${BUILDKITE_PLUGIN_NVM_CURLRC}" > "$CURL_HOME/.curlrc"
+fi
+
 # Store the installation directory in meta-data so that we can uninstall it later in the pre-exit hook.
 buildkite-agent meta-data set "automattic-nvm-installation-dir" "$NVM_DIR"
 echo "Installing nvm in $NVM_DIR"
