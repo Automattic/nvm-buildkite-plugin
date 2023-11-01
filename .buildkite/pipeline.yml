@@ -45,7 +45,14 @@ steps:
           - default
 
   - label: ":node: [Test] curlrc option"
-    command: cd tests/dummy && npm install
+    command: |
+      set -euo pipefail
+
+      echo "--- Verify node installation"
+      cd tests/dummy && npm install
+
+      echo "--- Verify curl output is NOT verbose"
+      curl -s https://google.com
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}:
           version: v17
