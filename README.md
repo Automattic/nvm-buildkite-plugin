@@ -10,7 +10,7 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: ls
     plugins:
-      - automattic/nvm#0.2.1:
+      - automattic/nvm#0.3.0:
           version: 'v18'
 ```
 
@@ -19,6 +19,10 @@ steps:
 ### `version` (Optional, string)
 
 The node.js version [that nvm supports](https://github.com/nvm-sh/nvm#nvmrc). If it's not set, the project's `.nvmrc` file will be used.
+
+### `curlrc` (Optional, string)
+
+Content of [a `.curlrc` file](https://curl.se/docs/manpage.html#-K). This option can be used to pass extra command line arguments to _all curl commands_. For example `--http1.1` makes nvm–which invokes curl commands—use HTTP1.1 protocol.
 
 ## Contributing
 
