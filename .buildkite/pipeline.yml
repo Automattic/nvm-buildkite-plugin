@@ -53,6 +53,11 @@ steps:
 
       echo "--- Verify curl output is NOT verbose"
       curl -s https://google.com
+
+      if curl -s https://google.com 2>&1 | grep -F HTTP; then
+        echo "curl command that is invoked in pipeline script should not be verbose"
+        exit 1
+      fi
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}:
           version: v17

@@ -22,6 +22,7 @@ export NVM_DIR
 touch "$NVM_DIR/.automattic-nvm-dir-marker"
 
 # Pass the user specified .curlrc file content to all curl commands.
+original_curl_home="${CURL_HOME:-}"
 if [[ -n ${BUILDKITE_PLUGIN_NVM_CURLRC:-} ]]; then
     export CURL_HOME="$NVM_DIR"
     echo "${BUILDKITE_PLUGIN_NVM_CURLRC}" > "$CURL_HOME/.curlrc"
@@ -55,3 +56,9 @@ fi
 
 echo "Verify that node (version $(node --version)) can be used"
 test "$(echo 'console.log("Hello node.js")' | node -)" == "Hello node.js"
+
+# Reset or remove CURL_HOME env var
+unset CURL_HOME
+if [[ -n ${original_curl_home:-} ]]; then
+    export CURL_HOME="${original_curl_home}"
+fi
