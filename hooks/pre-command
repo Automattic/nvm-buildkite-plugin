@@ -62,3 +62,5 @@ unset CURL_HOME
 if [[ -n ${original_curl_home:-} ]]; then
     export CURL_HOME="${original_curl_home}"
 fi
+
+echo "nvm and node successfully set up."
