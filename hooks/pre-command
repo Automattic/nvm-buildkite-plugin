@@ -37,7 +37,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFI
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh" --no-use
 
-echo "~~~ :node: Installing node.js"
+echo "~~~ :node: Installing Node.js"
 install_args=("--no-progress")
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
     echo "Installing node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
@@ -47,14 +47,14 @@ else
 fi
 nvm install "${install_args[@]}"
 
-echo "~~~ :node: Activating node"
+echo "~~~ :node: Activating Node.js"
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
     nvm use "${BUILDKITE_PLUGIN_NVM_VERSION}"
 else
     nvm use
 fi
 
-echo "Verifying that node (version $(node --version)) can be used..."
+echo "Verifying that Node.js (version $(node --version)) can be used..."
 test "$(echo 'console.log("Hello node.js")' | node -)" == "Hello node.js"
 
 # Reset or remove CURL_HOME env var
@@ -63,4 +63,4 @@ if [[ -n ${original_curl_home:-} ]]; then
     export CURL_HOME="${original_curl_home}"
 fi
 
-echo "nvm and node successfully set up."
+echo "Node.js and nvm successfully set up."
