@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-echo "~~~ Installing nvm"
+echo "~~~ :node: Installing nvm"
 
 [[ -f .nvmrc || -n "${BUILDKITE_PLUGIN_NVM_VERSION:-}" ]] || {
     echo "No .nvmrc or node version specified, skipping nvm installation"
@@ -37,7 +37,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFI
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh" --no-use
 
-echo "~~~ Installing node.js"
+echo "~~~ :node: Installing Node.js"
 install_args=("--no-progress")
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
     echo "Installing node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
@@ -47,14 +47,14 @@ else
 fi
 nvm install "${install_args[@]}"
 
-echo "~~~ Activate node"
+echo "~~~ :node: Activating Node.js"
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
     nvm use "${BUILDKITE_PLUGIN_NVM_VERSION}"
 else
     nvm use
 fi
 
-echo "Verify that node (version $(node --version)) can be used"
+echo "Verifying that Node.js (version $(node --version)) can be used..."
 test "$(echo 'console.log("Hello node.js")' | node -)" == "Hello node.js"
 
 # Reset or remove CURL_HOME env var
@@ -62,3 +62,5 @@ unset CURL_HOME
 if [[ -n ${original_curl_home:-} ]]; then
     export CURL_HOME="${original_curl_home}"
 fi
+
+echo "Node.js and nvm successfully set up."
