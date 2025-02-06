@@ -48,6 +48,13 @@ _None._
 
 _None._
 
+## 0.4.0
+
+### Internal Changes
+
+* Use "Node.js", the correct name for the platform, consistently in the logs [#18]
+* Logs in `pre-command` hook show `:node:` emoji like those in `pre-exit` already did [#17]
+
 ## 0.3.0
 
 ### New Features
