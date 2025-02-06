@@ -1,6 +1,6 @@
 # Node Buildkite Plugin
 
-Set up node.js environment using [nvm](https://github.com/nvm-sh/nvm).
+Set up Node.js environment using [nvm](https://github.com/nvm-sh/nvm).
 
 ## Example
 
@@ -18,7 +18,7 @@ steps:
 
 ### `version` (Optional, string)
 
-The node.js version [that nvm supports](https://github.com/nvm-sh/nvm#nvmrc). If it's not set, the project's `.nvmrc` file will be used.
+The Node.js version [that nvm supports](https://github.com/nvm-sh/nvm#nvmrc). If it's not set, the project's `.nvmrc` file will be used.
 
 ### `curlrc` (Optional, string)
 

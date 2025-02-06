@@ -1,5 +1,5 @@
 name: NVM
-description: Sets up node.js environment using nvm
+description: Sets up Node.js environment using nvm
 author: https://github.com/automattic
 requirements: []
 configuration:
