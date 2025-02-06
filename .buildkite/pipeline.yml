@@ -13,16 +13,17 @@ steps:
     matrix:
       setup:
         node:
-          # node v18 and later don't work on the current build agent.
-          # Once we switch to a newer OS for the default agent, we can add more node
-          # versions here. See https://github.com/nvm-sh/nvm/issues/2972
+          # Node.js v18 and later don't work on the current build agent.
+          # Once we switch to a newer OS for the default agent, we can add more
+          # Node.js versions here.
+          # See https://github.com/nvm-sh/nvm/issues/2972
           - v17
           - v16
         queue:
           - mac
           - default
 
-  - label: ":node: Do nothing when no .nvmrc and no node version specified"
+  - label: ":node: Do nothing when no .nvmrc and no Node.js version specified"
     command: echo noop
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
@@ -48,7 +49,7 @@ steps:
     command: |
       set -euo pipefail
 
-      echo "--- Verify node installation"
+      echo "--- Verify Node.js installation"
       cd tests/dummy && npm install
 
       echo "--- Verify curl output is NOT verbose"
