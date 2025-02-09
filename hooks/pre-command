@@ -5,7 +5,7 @@ set -euo pipefail
 echo "~~~ :node: Installing nvm"
 
 [[ -f .nvmrc || -n "${BUILDKITE_PLUGIN_NVM_VERSION:-}" ]] || {
-    echo "No .nvmrc or node version specified, skipping nvm installation"
+    echo "No .nvmrc or Node.js version specified, skipping nvm installation"
     return
 }
 
@@ -40,10 +40,10 @@ source "$NVM_DIR/nvm.sh" --no-use
 echo "~~~ :node: Installing Node.js"
 install_args=("--no-progress")
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
-    echo "Installing node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
+    echo "Installing Node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
     install_args+=("${BUILDKITE_PLUGIN_NVM_VERSION}")
 else
-    echo "Installing node.js version specified in the .nvmrc file"
+    echo "Installing Node.js version specified in the .nvmrc file"
 fi
 nvm install "${install_args[@]}"
 
@@ -55,7 +55,7 @@ else
 fi
 
 echo "Verifying that Node.js (version $(node --version)) can be used..."
-test "$(echo 'console.log("Hello node.js")' | node -)" == "Hello node.js"
+test "$(echo 'console.log("Hello Node.js")' | node -)" == "Hello Node.js"
 
 # Reset or remove CURL_HOME env var
 unset CURL_HOME
