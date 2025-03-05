@@ -2,13 +2,15 @@
 
 set -euo pipefail
 
-nvm_installation_dir=$(buildkite-agent meta-data get "automattic-nvm-installation-dir")
-# if file $nvm_dir/.automattic-nvm-dir-marker" exists
-if [[ -f "$nvm_installation_dir/.automattic-nvm-dir-marker" ]]; then
+# Use the same deterministic directory path as in pre-command
+nvm_dir="${TMPDIR:-/tmp}/automattic-nvm-${BUILDKITE_JOB_ID}"
+
+if [[ -d "$nvm_dir" ]]; then
     echo "~~~ :node: Uninstalling Node.js"
-    echo "Removing $nvm_installation_dir"
-    rm -rf "$nvm_installation_dir"
+    echo "Removing $nvm_dir"
+    rm -rf "$nvm_dir"
+    echo "Node.js successfully removed."
 else
     echo "~~~ :node: No Node.js installation to uninstall"
-    echo "The directory is not created by the automattic/nvm-buildkite-plugin: $nvm_installation_dir"
+    echo "Directory not found: $nvm_dir"
 fi

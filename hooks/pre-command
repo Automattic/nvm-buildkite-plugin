@@ -14,12 +14,14 @@ echo "~~~ :node: Installing nvm"
     return
 }
 
-NVM_DIR="$(mktemp -dt automattic-nvm-XXXXXXXX)"
+# Use a deterministic directory path based on BUILDKITE_JOB_ID
+NVM_DIR="${TMPDIR:-/tmp}/automattic-nvm-${BUILDKITE_JOB_ID}"
+mkdir -p "$NVM_DIR"
+
 # Make sure the path is a real path, to support scripts in macOS that source $NVM_DIR.
 # More details at https://github.com/Automattic/nvm-buildkite-plugin/pull/9
 NVM_DIR=$(readlink -fn "$NVM_DIR")
 export NVM_DIR
-touch "$NVM_DIR/.automattic-nvm-dir-marker"
 
 # Pass the user specified .curlrc file content to all curl commands.
 original_curl_home="${CURL_HOME:-}"
@@ -28,8 +30,6 @@ if [[ -n ${BUILDKITE_PLUGIN_NVM_CURLRC:-} ]]; then
     echo "${BUILDKITE_PLUGIN_NVM_CURLRC}" > "$CURL_HOME/.curlrc"
 fi
 
-# Store the installation directory in meta-data so that we can uninstall it later in the pre-exit hook.
-buildkite-agent meta-data set "automattic-nvm-installation-dir" "$NVM_DIR"
 echo "Installing nvm in $NVM_DIR"
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFILE=/dev/null bash
