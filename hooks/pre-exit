@@ -3,10 +3,8 @@
 set -euo pipefail
 
 # Use the same deterministic directory path as in pre-command
-TEMP_DIR="${TMPDIR:-/tmp}"
-nvm_dir="${TEMP_DIR}/automattic-nvm-${BUILDKITE_JOB_ID}"
+nvm_dir="${TMPDIR:-/tmp}/automattic-nvm-${BUILDKITE_JOB_ID}"
 
-# Check if the directory exists and has our marker file
 if [[ -d "$nvm_dir" ]]; then
     echo "~~~ :node: Uninstalling Node.js"
     echo "Removing $nvm_dir"
@@ -14,5 +12,5 @@ if [[ -d "$nvm_dir" ]]; then
     echo "Node.js successfully removed."
 else
     echo "~~~ :node: No Node.js installation to uninstall"
-    echo "Directory does not exist or was not created by this plugin: $nvm_dir"
+    echo "Directory not found: $nvm_dir"
 fi
