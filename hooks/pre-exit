@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+[[ -f .nvmrc || -n "${BUILDKITE_PLUGIN_NVM_VERSION:-}" ]] || {
+    echo "No .nvmrc or Node.js version specified, skipping nvm installation"
+    return
+}
+
 [[ -z "${IS_VM_HOST:-}" ]] || {
     echo "No need to uninstall nvm on the host, skipping nvm removal"
     return
