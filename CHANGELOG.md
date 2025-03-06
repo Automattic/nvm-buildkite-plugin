@@ -48,6 +48,12 @@ _None._
 
 _None._
 
+## 0.6.0
+
+### Bug Fixes
+
+* Fix NVM path issues on macOS ensuring proper cleanup [#22]
+
 ## 0.5.0
 
 ### Bug Fixes
