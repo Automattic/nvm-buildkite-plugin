@@ -14,8 +14,11 @@ echo "~~~ :node: Installing nvm"
     return
 }
 
+# Get the system temp directory, defaulting to /tmp if TMPDIR is not set
+tmpdir="${TMPDIR:-/tmp}"
+
 # Use a deterministic directory path based on BUILDKITE_JOB_ID
-NVM_DIR="${TMPDIR:-/tmp}/automattic-nvm-${BUILDKITE_JOB_ID}"
+NVM_DIR="${tmpdir%/}/automattic-nvm/${BUILDKITE_JOB_ID}"
 mkdir -p "$NVM_DIR"
 
 # Make sure the path is a real path, to support scripts in macOS that source $NVM_DIR.
