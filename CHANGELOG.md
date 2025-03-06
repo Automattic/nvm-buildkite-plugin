@@ -48,6 +48,12 @@ _None._
 
 _None._
 
+## 0.5.0
+
+### Bug Fixes
+
+* Fix issue with NVM directories not potentially being cleaned up after concurrently running build jobs [#20]
+
 ## 0.4.0
 
 ### Internal Changes
