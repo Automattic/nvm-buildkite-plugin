@@ -2,8 +2,19 @@
 
 set -euo pipefail
 
+[[ -z "${IS_VM_HOST:-}" ]] || {
+    echo "No need to uninstall nvm on the host, skipping nvm removal"
+    return
+}
+
+# Get the system temp directory, defaulting to /tmp if TMPDIR is not set
+tmpdir="${TMPDIR:-/tmp}"
+
 # Use the same deterministic directory path as in pre-command
-nvm_dir="${TMPDIR:-/tmp}/automattic-nvm-${BUILDKITE_JOB_ID}"
+nvm_dir="${tmpdir%/}/automattic-nvm/${BUILDKITE_JOB_ID}"
+
+# Make sure the path is a real path, just like in pre-command
+nvm_dir=$(readlink -fn "$nvm_dir")
 
 if [[ -d "$nvm_dir" ]]; then
     echo "~~~ :node: Uninstalling Node.js"
