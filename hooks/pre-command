@@ -54,7 +54,10 @@ if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
 else
     echo "Installing Node.js version specified in the .nvmrc file"
 fi
-nvm install "${install_args[@]}"
+
+install_timeout_seconds="$(nvm_plugin_read_seconds BUILDKITE_PLUGIN_NVM_INSTALL_TIMEOUT_SECONDS 1800 install-timeout-seconds)"
+heartbeat_seconds="$(nvm_plugin_read_seconds BUILDKITE_PLUGIN_NVM_HEARTBEAT_SECONDS 60 heartbeat-seconds)"
+nvm_plugin_run_with_timeout "nvm install" "$install_timeout_seconds" "$heartbeat_seconds" nvm install "${install_args[@]}"
 
 echo "~~~ :node: Activating Node.js"
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then

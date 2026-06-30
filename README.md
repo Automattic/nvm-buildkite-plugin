@@ -24,6 +24,18 @@ The Node.js version [that nvm supports](https://github.com/nvm-sh/nvm#nvmrc). If
 
 Content of [a `.curlrc` file](https://curl.se/docs/manpage.html#-K). This option can be used to pass extra command line arguments to _all curl commands_. For example `--http1.1` makes nvm–which invokes curl commands—use HTTP1.1 protocol.
 
+### `install-timeout-seconds` (Optional, integer)
+
+Maximum number of seconds to allow `nvm install` to run before terminating it.
+Defaults to `1800`.
+Use `0` to disable the timeout.
+
+### `heartbeat-seconds` (Optional, integer)
+
+Number of seconds between progress messages while `nvm install` is still running.
+Defaults to `60`.
+Use `0` to disable heartbeat messages.
+
 ## Contributing
 
 1. Fork the repo
