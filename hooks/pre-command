@@ -54,6 +54,13 @@ if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
 else
     echo "Installing Node.js version specified in the .nvmrc file"
 fi
+# DIAGNOSTIC (temporary): nvm_find_project_dir loops forever when `${PWD%/*}`
+# can't strip a trailing segment (a pure-backslash Windows PWD). Print to stderr
+# so it flushes before any hang. `one-trim` equal to `PWD` proves the no-op loop.
+printf '[diag] PWD=%s\n' "$PWD" >&2
+printf '[diag] pwd=%s\n' "$(pwd)" >&2
+printf '[diag] one-trim=%s\n' "${PWD%/*}" >&2
+
 nvm install "${install_args[@]}"
 
 echo "~~~ :node: Activating Node.js"
