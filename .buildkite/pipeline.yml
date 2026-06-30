@@ -25,8 +25,13 @@ steps:
           - mac
           - default
 
+  # EXPERIMENT: same explicit-version Windows jobs that hang, but with a .nvmrc
+  # generated in the working directory. If these pass, .nvmrc presence is what
+  # prevents the post-checksum hang on the explicit-version path.
   - label: ":windows: :node: Validate {{ matrix.node }} on Windows"
     command: bash .buildkite/verify_node.sh {{ matrix.node }}
+    env:
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: "{{ matrix.node }}"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}:
           version: "{{ matrix.node }}"
