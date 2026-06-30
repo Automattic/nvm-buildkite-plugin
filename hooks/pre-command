@@ -54,7 +54,13 @@ if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
 else
     echo "Installing Node.js version specified in the .nvmrc file"
 fi
-nvm install "${install_args[@]}"
+# Windows agents hang after checksum validation when `nvm install` runs in the parent hook shell.
+# Running it in a fresh child shell that re-sources nvm gets past the hang.
+bash -c '
+set -e
+source "$NVM_DIR/nvm.sh" --no-use
+nvm install "$@"
+' nvm-install "${install_args[@]}"
 
 echo "~~~ :node: Activating Node.js"
 if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
