@@ -39,9 +39,10 @@ fi
 
 echo "Installing nvm in $NVM_DIR"
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFILE=/dev/null bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | PROFILE=/dev/null bash
 
-nvm_plugin_normalize_windows_pwd_for_nvm
+# SPIKE: normalization removed to test whether nvm v0.40.5 handles the Windows
+# backslash PWD natively. Restore if the Windows jobs hang.
 
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh" --no-use
