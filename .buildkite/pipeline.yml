@@ -1,4 +1,6 @@
 steps:
+  - command: make test
+
   - command: make validate
 
   - label: ":node: Validate {{ matrix.node }} via version property"
@@ -23,8 +25,28 @@ steps:
           - mac
           - default
 
-  - label: ":node: Do nothing when no .nvmrc and no Node.js version specified"
-    command: echo noop
+  - label: ":windows: :node: Validate {{ matrix.node }} on Windows"
+    command: bash .buildkite/verify_node.sh {{ matrix.node }}
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}:
+          version: "{{ matrix.node }}"
+    agents:
+      queue: windows
+    matrix:
+      setup:
+        node:
+          - v20.19.5
+          - v24.15.0
+
+  - label: ":windows: :node: Validate .nvmrc fallback on Windows"
+    command: bash .buildkite/verify_node.sh 20.19.5
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}
+    agents:
+      queue: windows
+
+  - label: ":node: Validate .nvmrc fallback"
+    command: .buildkite/verify_node.sh 20.19.5
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
 

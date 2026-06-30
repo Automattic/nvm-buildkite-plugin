@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+plugin_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=hooks/lib/nvm-buildkite-plugin.bash
+source "$plugin_dir/hooks/lib/nvm-buildkite-plugin.bash"
+
 echo "~~~ :node: Installing nvm"
 
 [[ -f .nvmrc || -n "${BUILDKITE_PLUGIN_NVM_VERSION:-}" ]] || {
@@ -39,6 +43,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFI
 
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh" --no-use
+
+nvm_plugin_normalize_windows_pwd_for_nvm
 
 echo "~~~ :node: Installing Node.js"
 install_args=("--no-progress")
