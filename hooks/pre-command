@@ -41,31 +41,28 @@ echo "Installing nvm in $NVM_DIR"
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | PROFILE=/dev/null bash
 
+# DIAGNOSTIC v3 (temporary): bisect where the Windows hang is. A padding block
+# fills the stdio buffer (which never flushes while the process hangs), forcing
+# a flush BEFORE each risky step so a later hang can't erase earlier readings.
+# Search the log for "[diag]". The last [diag] STAGE seen pinpoints the hang.
+diag_flush() { awk 'BEGIN { for (i = 0; i < 4000; i++) print "[pad] flush " i }'; }
+diag_trim_noop() { [ "${PWD%/*}" = "$PWD" ] && echo YES || echo NO; }
+
+printf '[diag] STAGE raw: PWD=%s trim-noop=%s\n' "$PWD" "$(diag_trim_noop)"
+printf '[diag] STAGE about-to-normalize\n'
+diag_flush
+
 nvm_plugin_normalize_windows_pwd_for_nvm
+printf '[diag] STAGE normalized: PWD=%s trim-noop=%s\n' "$PWD" "$(diag_trim_noop)"
+printf '[diag] STAGE about-to-source\n'
+diag_flush
 
 # shellcheck source=/dev/null
 source "$NVM_DIR/nvm.sh" --no-use
+printf '[diag] STAGE sourced-ok\n'
+diag_flush
 
-echo "~~~ :node: Installing Node.js"
-install_args=("--no-progress")
-if [[ -n ${BUILDKITE_PLUGIN_NVM_VERSION:-} ]]; then
-    echo "Installing Node.js version ${BUILDKITE_PLUGIN_NVM_VERSION}"
-    install_args+=("${BUILDKITE_PLUGIN_NVM_VERSION}")
-else
-    echo "Installing Node.js version specified in the .nvmrc file"
-fi
-# DIAGNOSTIC (temporary): nvm_find_project_dir loops forever when `${PWD%/*}`
-# can't strip a trailing segment (a pure-backslash Windows PWD). Buffered hook
-# output never flushes while the process hangs, so report the verdict and
-# `return` BEFORE the real install — the hook exits and Buildkite flushes this.
-printf '[diag] PWD=%s\n' "$PWD"
-printf '[diag] pwd=%s\n' "$(pwd)"
-printf '[diag] one-trim=%s\n' "${PWD%/*}"
-if [ "${PWD%/*}" = "$PWD" ]; then
-    printf '[diag] VERDICT: trim is a NO-OP -> nvm_find_project_dir would loop forever here\n'
-else
-    printf '[diag] VERDICT: trim shrinks PWD -> walk terminates; hang is elsewhere\n'
-fi
+printf '[diag] STAGE all-clear: neither normalize nor source hung\n'
 return 0
 
 nvm install "${install_args[@]}"
