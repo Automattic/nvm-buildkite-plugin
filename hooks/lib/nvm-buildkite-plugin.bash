@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-# Sourced helper only; callers set strict mode before loading it.
-# nvm walks PWD with slash trimming; Windows paths can make that loop forever.
+# Sourced helper only, so no set options. Up to callers to set strict mode before loading it.
+#
+# nvm walks PWD with slash trimming, Windows paths can make that loop forever.
+# These helpers allow preventing that behavior.
 
 nvm_plugin_should_normalize_windows_pwd() {
     local shell_name="$1"
