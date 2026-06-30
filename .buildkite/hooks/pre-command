@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
+# Allow for the creation of an .nvmrc file in the CI machine.
+# This allows testing the plugin fallback to .nvmrc without a confusing instance in the repo root.
+
 set -euo pipefail
 
 if [[ -z "${NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION:-}" ]]; then
     exit 0
 fi
 
-# CI-only fixture for exercising plugin fallback to .nvmrc.
 printf '%s\n' "$NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION" > .nvmrc
