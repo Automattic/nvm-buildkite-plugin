@@ -181,3 +181,16 @@ nvm_plugin_run_with_timeout() {
 
     return "$status"
 }
+
+nvm_plugin_run_nvm_install_with_timeout() {
+    local timeout_seconds="$1"
+    local heartbeat_seconds="$2"
+    shift 2
+
+    # shellcheck disable=SC2016
+    nvm_plugin_run_with_timeout "nvm install" "$timeout_seconds" "$heartbeat_seconds" bash -c '
+set -e
+source "$NVM_DIR/nvm.sh" --no-use
+nvm install "$@"
+' nvm-install "$@"
+}

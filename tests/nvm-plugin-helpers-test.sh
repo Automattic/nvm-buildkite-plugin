@@ -109,4 +109,29 @@ assert_contains "slow command timed out after 1s" "$tmpdir/timeout.err"
 nvm_plugin_run_with_timeout "heartbeat command" 5 1 bash -c 'sleep 2' >"$tmpdir/heartbeat.out"
 assert_contains "heartbeat command still running after 1s" "$tmpdir/heartbeat.out"
 
+unset -f nvm 2>/dev/null || true
+mkdir -p "$tmpdir/fake-nvm"
+cat > "$tmpdir/fake-nvm/nvm.sh" <<'NVM'
+nvm() {
+    case "$1" in
+        install)
+            shift
+            echo "fake child nvm install $*"
+            touch "$NVM_DIR/installed"
+            ;;
+        *)
+            echo "unsupported nvm command: $*" >&2
+            return 1
+            ;;
+    esac
+}
+NVM
+
+export NVM_DIR="$tmpdir/fake-nvm"
+nvm_plugin_run_nvm_install_with_timeout 5 0 --no-progress 20.19.5 >"$tmpdir/child-install.out"
+assert_contains "fake child nvm install --no-progress 20.19.5" "$tmpdir/child-install.out"
+[[ -f "$tmpdir/fake-nvm/installed" ]] || fail "child nvm install should create installed marker"
+
+unset NVM_DIR
+
 echo "All helper tests passed."
