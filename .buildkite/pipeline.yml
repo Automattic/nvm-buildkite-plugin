@@ -39,20 +39,22 @@ steps:
           - v24.15.0
 
   - label: ":windows: :node: Validate .nvmrc fallback on Windows"
+    env:
+      # Create an .nvmrc file to verify the plugin reads it
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 20.19.5
     command: bash .buildkite/verify_node.sh "$(cat .nvmrc)"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
-    env:
-      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 20.19.5
     agents:
       queue: windows
 
-  - label: ":node: Validate .nvmrc fallback"
+  - label: ":node: Validate .nvmrc fallback" 
+    env:
+      # Create an .nvmrc file to verify the plugin reads it
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 24.18.0
     command: .buildkite/verify_node.sh "$(cat .nvmrc)"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
-    env:
-      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 20.19.5
 
   # More details on what is being test here can be found at
   # https://github.com/Automattic/nvm-buildkite-plugin/pull/9
