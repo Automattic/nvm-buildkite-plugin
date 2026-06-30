@@ -52,6 +52,8 @@ echo "20.19.5" > "$tmpdir/work/.nvmrc"
 (
     export PATH="$tmpdir/bin:$PATH"
     export BUILDKITE_JOB_ID="pre-command-smoke"
+    export BUILDKITE_PLUGIN_NVM_INSTALL_TIMEOUT_SECONDS=5
+    export BUILDKITE_PLUGIN_NVM_HEARTBEAT_SECONDS=0
     export TMPDIR="$tmpdir/tmp"
     mkdir -p "$TMPDIR"
 
