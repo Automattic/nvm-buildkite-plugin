@@ -39,7 +39,7 @@ steps:
           - v24.15.0
 
   - label: ":windows: :node: Validate .nvmrc fallback on Windows"
-    command: bash .buildkite/verify_node.sh 20.19.5
+    command: bash .buildkite/verify_node.sh "$NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
     env:
@@ -48,7 +48,7 @@ steps:
       queue: windows
 
   - label: ":node: Validate .nvmrc fallback"
-    command: .buildkite/verify_node.sh 20.19.5
+    command: .buildkite/verify_node.sh "$NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
     env:
