@@ -22,4 +22,12 @@ if nvm_plugin_should_normalize_windows_pwd "linux-gnu" 'C:\buildkite-agent\repo'
     fail "non-Windows shell PWD should not be normalized"
 fi
 
+[[ "$(nvm_plugin_windows_pwd_to_posix 'C:\buildkite-agent\repo')" == "/c/buildkite-agent/repo" ]] || fail "backslash drive path should convert to POSIX path"
+[[ "$(nvm_plugin_windows_pwd_to_posix 'D:/buildkite-agent/repo')" == "/d/buildkite-agent/repo" ]] || fail "slash drive path should convert to POSIX path"
+[[ "$(nvm_plugin_windows_pwd_to_posix '\\server\share\repo')" == "//server/share/repo" ]] || fail "UNC path should convert to POSIX path"
+
+if nvm_plugin_windows_pwd_to_posix "/c/buildkite-agent/repo" >/dev/null; then
+    fail "POSIX path should not be converted"
+fi
+
 echo "All helper tests passed."
