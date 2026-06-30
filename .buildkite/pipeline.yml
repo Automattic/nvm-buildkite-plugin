@@ -42,6 +42,8 @@ steps:
     command: bash .buildkite/verify_node.sh 20.19.5
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
+    env:
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 20.19.5
     agents:
       queue: windows
 
@@ -49,6 +51,8 @@ steps:
     command: .buildkite/verify_node.sh 20.19.5
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
+    env:
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 20.19.5
 
   # More details on what is being test here can be found at
   # https://github.com/Automattic/nvm-buildkite-plugin/pull/9

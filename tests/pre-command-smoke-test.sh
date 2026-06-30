@@ -47,7 +47,12 @@ fi
 NODE
 chmod +x "$tmpdir/bin/node"
 
-echo "20.19.5" > "$tmpdir/work/.nvmrc"
+(
+    export NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION=20.19.5
+
+    cd "$tmpdir/work"
+    bash "$repo_root/.buildkite/hooks/pre-command"
+)
 
 (
     export PATH="$tmpdir/bin:$PATH"

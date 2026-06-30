@@ -14,6 +14,7 @@ echo "Checking if the active Node.js version is '$1'"
 expected_version=$(nvm version-remote "$1")
 echo "'$1' is resolved to the Node.js version $expected_version"
 
+# On Windows, `nvm current` reports `system` after `--no-use`; PATH has the real version.
 case "$(uname -s 2>/dev/null || true)" in
     CYGWIN* | MINGW* | MSYS*)
         current_version=$(node --version)

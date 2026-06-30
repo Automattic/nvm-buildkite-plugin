@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Sourced helper only; callers set strict mode before loading it.
+# nvm walks PWD with slash trimming; Windows paths can make that loop forever.
+
 nvm_plugin_should_normalize_windows_pwd() {
     local shell_name="$1"
     local current_pwd="$2"
@@ -41,7 +44,6 @@ nvm_plugin_normalize_windows_pwd_for_nvm() {
         return 0
     fi
 
-    # nvm walks PWD with slash trimming; Windows paths can make that loop forever.
     echo "Normalizing Windows PWD for nvm from ${PWD} to ${normalized_pwd}"
     cd "$normalized_pwd" || {
         echo "Failed to normalize Windows PWD for nvm to ${normalized_pwd}"
