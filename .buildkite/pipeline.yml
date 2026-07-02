@@ -27,6 +27,12 @@ steps:
 
   - label: ":windows: :node: Validate {{ matrix.node }} on Windows"
     command: bash .buildkite/verify_node.sh {{ matrix.node }}
+    env:
+      # nvm v0.39.4 hangs on the Windows agent when no .nvmrc exists in the
+      # working directory: its ancestor walk for one loops forever under the
+      # agent's bash. The version property below still drives the install; this
+      # .nvmrc only exists to short-circuit that walk.
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: "{{ matrix.node }}"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}:
           version: "{{ matrix.node }}"
