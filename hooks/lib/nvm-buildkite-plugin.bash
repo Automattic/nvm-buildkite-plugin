@@ -46,33 +46,41 @@ nvm_plugin_windows_pwd_to_posix() {
     esac
 }
 
-nvm_plugin_normalize_windows_pwd_for_nvm() {
-    local shell_name
-    shell_name="$(uname -s 2>/dev/null || true)"
+# Echoes the POSIX directory nvm should run in for the given shell and PWD.
+# Returns 0 with no output when no normalization is needed. Returns non-zero
+# when the PWD needs normalizing but a usable target can't be produced — the
+# caller must treat that as fatal, since letting nvm run on the un-normalized
+# PWD is the hang this helper exists to avoid.
+nvm_plugin_resolve_normalized_pwd() {
+    local shell_name="$1"
+    local current_pwd="$2"
 
-    if ! nvm_plugin_should_normalize_windows_pwd "$shell_name" "${PWD:-}"; then
-        return 0
-    fi
+    nvm_plugin_should_normalize_windows_pwd "$shell_name" "$current_pwd" || return 0
 
     local normalized_pwd
-    if ! normalized_pwd="$(nvm_plugin_windows_pwd_to_posix "$PWD")"; then
-        echo "Cannot normalize Windows PWD for nvm from ${PWD}"
-        return 0
+    normalized_pwd="$(nvm_plugin_windows_pwd_to_posix "$current_pwd")" || return 1
+    [[ -n "$normalized_pwd" && "$normalized_pwd" != "$current_pwd" ]] || return 1
+    [[ -d "$normalized_pwd" ]] || return 1
+
+    printf '%s\n' "$normalized_pwd"
+}
+
+nvm_plugin_normalize_windows_pwd_for_nvm() {
+    local shell_name current_pwd
+    shell_name="$(uname -s 2>/dev/null || true)"
+    current_pwd="${PWD:-}"
+
+    local normalized_pwd
+    if ! normalized_pwd="$(nvm_plugin_resolve_normalized_pwd "$shell_name" "$current_pwd")"; then
+        echo "Cannot normalize Windows PWD for nvm from ${current_pwd}; refusing to continue so nvm does not hang" >&2
+        return 1
     fi
 
-    if [[ -z "$normalized_pwd" || "$normalized_pwd" == "$PWD" ]]; then
-        echo "Cannot normalize Windows PWD for nvm from ${PWD}"
-        return 0
-    fi
+    [[ -n "$normalized_pwd" ]] || return 0
 
-    if [[ ! -d "$normalized_pwd" ]]; then
-        echo "Cannot normalize Windows PWD for nvm because ${normalized_pwd} is not a directory"
-        return 0
-    fi
-
-    echo "Normalizing Windows PWD for nvm from ${PWD} to ${normalized_pwd}"
+    echo "Normalizing Windows PWD for nvm from ${current_pwd} to ${normalized_pwd}"
     cd "$normalized_pwd" || {
-        echo "Failed to normalize Windows PWD for nvm to ${normalized_pwd}"
-        return 0
+        echo "Cannot enter normalized Windows PWD ${normalized_pwd} for nvm; refusing to continue so nvm does not hang" >&2
+        return 1
     }
 }
