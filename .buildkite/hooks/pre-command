@@ -5,8 +5,6 @@
 
 set -euo pipefail
 
-if [[ -z "${NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION:-}" ]]; then
-    exit 0
+if [[ -n "${NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION:-}" ]]; then
+    printf '%s\n' "$NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION" > .nvmrc
 fi
-
-printf '%s\n' "$NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION" > .nvmrc
