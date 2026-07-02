@@ -30,4 +30,22 @@ if nvm_plugin_windows_pwd_to_posix "/c/buildkite-agent/repo" >/dev/null; then
     fail "POSIX path should not be converted"
 fi
 
+# nvm_plugin_resolve_normalized_pwd: no normalization needed -> success, no output.
+[[ -z "$(nvm_plugin_resolve_normalized_pwd "linux-gnu" 'C:\buildkite-agent\repo')" ]] || fail "non-Windows shell should resolve to no normalization"
+[[ -z "$(nvm_plugin_resolve_normalized_pwd "MSYS_NT-10.0" "/c/buildkite-agent/repo")" ]] || fail "POSIX PWD should resolve to no normalization"
+
+# A PWD that needs normalizing and points at a real directory resolves to it.
+real_dir="$(mktemp -d)"
+trap 'rm -rf "$real_dir"' EXIT
+resolved="$(nvm_plugin_resolve_normalized_pwd "MSYS_NT-10.0" "\\${real_dir//\//\\}")" || fail "resolvable Windows PWD should not fail"
+[[ -n "$resolved" && -d "$resolved" ]] || fail "resolvable Windows PWD should be normalized to an existing directory"
+
+# A PWD that needs normalizing but cannot be resolved must fail, not fall through.
+if nvm_plugin_resolve_normalized_pwd "MSYS_NT-10.0" 'relative\path' >/dev/null; then
+    fail "unconvertible Windows PWD should fail rather than resolve"
+fi
+if nvm_plugin_resolve_normalized_pwd "MSYS_NT-10.0" 'C:\does\not\exist' >/dev/null; then
+    fail "Windows PWD pointing at a missing directory should fail rather than resolve"
+fi
+
 echo "All helper tests passed."
