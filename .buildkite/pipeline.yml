@@ -1,4 +1,6 @@
 steps:
+  - command: make test
+
   - command: make validate
 
   - label: ":node: Validate {{ matrix.node }} via version property"
@@ -23,8 +25,40 @@ steps:
           - mac
           - default
 
-  - label: ":node: Do nothing when no .nvmrc and no Node.js version specified"
-    command: echo noop
+  - label: ":windows: :node: Validate {{ matrix.node }} on Windows"
+    command: bash .buildkite/verify_node.sh {{ matrix.node }}
+    env:
+      # nvm v0.39.4 hangs on the Windows agent when no .nvmrc exists in the
+      # working directory: its ancestor walk for one loops forever under the
+      # agent's bash. The version property below still drives the install; this
+      # .nvmrc only exists to short-circuit that walk.
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: "{{ matrix.node }}"
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}:
+          version: "{{ matrix.node }}"
+    agents:
+      queue: windows
+    matrix:
+      setup:
+        node:
+          - v20.19.5
+          - v24.15.0
+
+  - label: ":windows: :node: Validate .nvmrc fallback on Windows"
+    env:
+      # Create an .nvmrc file to verify the plugin reads it
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 20.19.5
+    command: bash .buildkite/verify_node.sh "$(cat .nvmrc)"
+    plugins:
+      - automattic/nvm#${BUILDKITE_COMMIT}
+    agents:
+      queue: windows
+
+  - label: ":node: Validate .nvmrc fallback" 
+    env:
+      # Create an .nvmrc file to verify the plugin reads it
+      NVM_BUILDKITE_PLUGIN_TEST_NVMRC_VERSION: 24.18.0
+    command: .buildkite/verify_node.sh "$(cat .nvmrc)"
     plugins:
       - automattic/nvm#${BUILDKITE_COMMIT}
 
