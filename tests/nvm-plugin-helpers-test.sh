@@ -35,6 +35,8 @@ fi
 [[ -z "$(nvm_plugin_resolve_normalized_pwd "MSYS_NT-10.0" "/c/buildkite-agent/repo")" ]] || fail "POSIX PWD should resolve to no normalization"
 
 # A PWD that needs normalizing and points at a real directory resolves to it.
+# The input is the tmp dir as a UNC path: a leading "\\" plus the dir with its
+# slashes flipped to backslashes, which nvm_plugin_windows_pwd_to_posix converts back.
 real_dir="$(mktemp -d)"
 trap 'rm -rf "$real_dir"' EXIT
 resolved="$(nvm_plugin_resolve_normalized_pwd "MSYS_NT-10.0" "\\${real_dir//\//\\}")" || fail "resolvable Windows PWD should not fail"

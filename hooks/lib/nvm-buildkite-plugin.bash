@@ -66,18 +66,19 @@ nvm_plugin_resolve_normalized_pwd() {
 }
 
 nvm_plugin_normalize_windows_pwd_for_nvm() {
-    local shell_name
+    local shell_name current_pwd
     shell_name="$(uname -s 2>/dev/null || true)"
+    current_pwd="${PWD:-}"
 
     local normalized_pwd
-    if ! normalized_pwd="$(nvm_plugin_resolve_normalized_pwd "$shell_name" "${PWD:-}")"; then
-        echo "Cannot normalize Windows PWD for nvm from ${PWD}; refusing to continue so nvm does not hang" >&2
+    if ! normalized_pwd="$(nvm_plugin_resolve_normalized_pwd "$shell_name" "$current_pwd")"; then
+        echo "Cannot normalize Windows PWD for nvm from ${current_pwd}; refusing to continue so nvm does not hang" >&2
         return 1
     fi
 
     [[ -n "$normalized_pwd" ]] || return 0
 
-    echo "Normalizing Windows PWD for nvm from ${PWD} to ${normalized_pwd}"
+    echo "Normalizing Windows PWD for nvm from ${current_pwd} to ${normalized_pwd}"
     cd "$normalized_pwd" || {
         echo "Cannot enter normalized Windows PWD ${normalized_pwd} for nvm; refusing to continue so nvm does not hang" >&2
         return 1
