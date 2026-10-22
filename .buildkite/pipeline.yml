@@ -9,7 +9,7 @@ steps:
       - automattic/nvm#${BUILDKITE_COMMIT}:
           version: "{{ matrix.node }}"
     env:
-      IMAGE_ID: xcode-15.2
+      IMAGE_ID: xcode-27.1
     agents:
       queue: "{{ matrix.queue }}"
     matrix:
@@ -70,7 +70,7 @@ steps:
       - automattic/nvm#${BUILDKITE_COMMIT}:
           version: v17
     env:
-      IMAGE_ID: xcode-15.2
+      IMAGE_ID: xcode-27.1
     agents:
       queue: "{{ matrix.queue }}"
     matrix:
@@ -98,7 +98,7 @@ steps:
           version: v17
           curlrc: --verbose
     env:
-      IMAGE_ID: xcode-15.2
+      IMAGE_ID: xcode-27.1
     agents:
       queue: "{{ matrix.queue }}"
     matrix:
